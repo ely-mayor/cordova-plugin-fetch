@@ -31,7 +31,7 @@ public class FetchPlugin extends CordovaPlugin {
     private OkHttpClient mClient = new OkHttpClient();
     public static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
 
-    private static final long DEFAULT_TIMEOUT = 10;
+    private static final long DEFAULT_TIMEOUT = 180;
 
     @Override
     public boolean execute(final String action, final JSONArray data, final CallbackContext callbackContext) {
@@ -40,7 +40,7 @@ public class FetchPlugin extends CordovaPlugin {
 
             try {
                 String method = data.getString(0);
-                Log.v(LOG_TAG, "execute: method = " + method.toString());
+                Log.v(LOG_TAG, "execute: http method  = " + method.toString());
 
                 String urlString = data.getString(1);
                 Log.v(LOG_TAG, "execute: urlString = " + urlString.toString());
@@ -165,7 +165,7 @@ public class FetchPlugin extends CordovaPlugin {
         Log.v(LOG_TAG, "setTimeout: " + seconds);
 
 	mClient = mClient.newBuilder()
-	  .connectionPool(new ConnectionPool(5, 30, TimeUnit.SECONDS)) 
+	  .connectionPool(new ConnectionPool(5, seconds, TimeUnit.SECONDS)) 
           .connectTimeout(seconds, TimeUnit.SECONDS)
           .readTimeout(seconds, TimeUnit.SECONDS)
           .writeTimeout(seconds, TimeUnit.SECONDS)
