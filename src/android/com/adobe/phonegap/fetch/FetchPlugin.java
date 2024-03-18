@@ -11,7 +11,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.Call;
-// import okhttp3.ConnectionPool;
+import okhttp3.ConnectionPool;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -165,7 +165,7 @@ public class FetchPlugin extends CordovaPlugin {
         Log.v(LOG_TAG, "setTimeout: " + seconds);
 
 	mClient = mClient.newBuilder()
-	  // .connectionPool(new ConnectionPool(5, 30, TimeUnit.SECONDS)) 
+	  .connectionPool(new ConnectionPool(5, 30, TimeUnit.SECONDS)) 
           .connectTimeout(seconds, TimeUnit.SECONDS)
           .readTimeout(seconds, TimeUnit.SECONDS)
           .writeTimeout(seconds, TimeUnit.SECONDS)
