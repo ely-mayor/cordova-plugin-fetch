@@ -23,7 +23,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import static online.streamely.www.OkHttpClientExtensionsKt.ignoreAllSSLErrors;
-import static OkHttpClientExtensionsKt.ignoreAllSSLErrors;
 
 public class FetchPlugin extends CordovaPlugin {
 
