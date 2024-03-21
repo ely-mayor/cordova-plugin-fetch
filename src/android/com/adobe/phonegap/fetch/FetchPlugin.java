@@ -167,11 +167,10 @@ public class FetchPlugin extends CordovaPlugin {
 
     private void setTimeout(long seconds) {
         Log.v(LOG_TAG, "setTimeout: " + seconds);
-        mClient = ignoreAllSSLErrors(mClient.newBuilder())
-            .connectionPool(new ConnectionPool(5, seconds, TimeUnit.SECONDS))
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .build();
+        mClient = mClient.newBuilder()
+          .connectTimeout(seconds, TimeUnit.SECONDS)
+          .readTimeout(seconds, TimeUnit.SECONDS)
+          .writeTimeout(seconds, TimeUnit.SECONDS)
+	  .build();
     }
 }
