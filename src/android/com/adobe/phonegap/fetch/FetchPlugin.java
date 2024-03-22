@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.security.cert.X509Certificate;
+import java.security.cert.CertificateException;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -106,16 +107,20 @@ private static OkHttpClient getUnsafeOkHttpClient() {
 @Override
     protected void pluginInitialize() {
         super.pluginInitialize();
-        
-// Initialize   
-   try {
-	OkHttpClient unsafeOkHttpClient = getUnsafeOkHttpClient();
+
+        OkHttpClient unsafeOkHttpClient = getUnsafeOkHttpClient();
         mClient = unsafeOkHttpClient.newBuilder()
                 .connectionPool(new ConnectionPool(5, 10, TimeUnit.SECONDS))
                 .build();
-    } catch (NoSuchAlgorithmException | KeyManagementException e) {
-        Log.e(LOG_TAG, "Error while setting timeout: " + e.getMessage());
-    }
+// Initialize   
+ //   try {
+	// OkHttpClient unsafeOkHttpClient = getUnsafeOkHttpClient();
+ //        mClient = unsafeOkHttpClient.newBuilder()
+ //                .connectionPool(new ConnectionPool(5, 10, TimeUnit.SECONDS))
+ //                .build();
+ //    } catch (NoSuchAlgorithmException | KeyManagementException e) {
+ //        Log.e(LOG_TAG, "Error while setting timeout: " + e.getMessage());
+ //    }
  }
 
 	
