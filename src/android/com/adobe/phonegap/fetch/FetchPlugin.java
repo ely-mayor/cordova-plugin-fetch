@@ -60,6 +60,48 @@ public class FetchPlugin extends CordovaPlugin {
 
     private static final long DEFAULT_TIMEOUT = 10;
 
+private static OkHttpClient getUnsafeOkHttpClient() {
+  try {
+    // Create a trust manager that does not validate certificate chains
+    final TrustManager[] trustAllCerts = new TrustManager[] {
+        new X509TrustManager() {
+          @Override
+          public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+          }
+
+          @Override
+          public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+          }
+
+          @Override
+          public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+            return new java.security.cert.X509Certificate[]{};
+          }
+        }
+    };
+
+    // Install the all-trusting trust manager
+    final SSLContext sslContext = SSLContext.getInstance("SSL");
+    sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+    // Create an ssl socket factory with our all-trusting manager
+    final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+    OkHttpClient.Builder builder = new OkHttpClient.Builder();
+    builder.sslSocketFactory(sslSocketFactory, (X509TrustManager)trustAllCerts[0]);
+    builder.hostnameVerifier(new HostnameVerifier() {
+      @Override
+      public boolean verify(String hostname, SSLSession session) {
+        return true;
+      }
+    });
+
+    OkHttpClient okHttpClient = builder.build();
+    return okHttpClient;
+  } catch (Exception e) {
+    throw new RuntimeException(e);
+  }
+}
+
 
 @Override
     protected void pluginInitialize() {
@@ -67,12 +109,9 @@ public class FetchPlugin extends CordovaPlugin {
         
 // Initialize   
    try {
-	SSLContext sslcontext = SSLContext.getInstance("TLSv1.2");
-        sslcontext.init(null, null, null);
-        SSLSocketFactory noSSLv3Factory = new NoSSLFactory(sslcontext.getSocketFactory());
-	
-        mClient = mClient.newBuilder()
-		.sslSocketFactory(noSSLv3Factory, (X509TrustManager) trustAllCerts[0])
+	OkHttpClient unsafeOkHttpClient = getUnsafeOkHttpClient();
+        mClient = unsafeOkHttpClient.newBuilder()
+                .connectionPool(new ConnectionPool(5, 10, TimeUnit.SECONDS))
                 .build();
     } catch (NoSuchAlgorithmException | KeyManagementException e) {
         Log.e(LOG_TAG, "Error while setting timeout: " + e.getMessage());
