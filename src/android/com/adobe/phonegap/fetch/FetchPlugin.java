@@ -42,21 +42,13 @@ public class FetchPlugin extends CordovaPlugin {
 
     private static final long DEFAULT_TIMEOUT = 10;
 
-    private SSLSocketFactory noSSLv3Factory;
-
 
 @Override
     protected void pluginInitialize() {
         super.pluginInitialize();
         
-        // Initialize NoSSLv3SocketFactory
-        noSSLv3Factory = new NoSSLv3SocketFactory();
+	// Initialize   
         
-        // Initialize OkHttpClient with the custom SSLSocketFactory
-        mClient = new OkHttpClient.Builder()
-            .sslSocketFactory(noSSLv3Factory)
-	sslContext.getSocketFactory()
-            .build();
     }
 
 	
@@ -193,7 +185,11 @@ public class FetchPlugin extends CordovaPlugin {
 
     private void setTimeout(long seconds) {
         Log.v(LOG_TAG, "setTimeout: " + seconds);
+	SSLContext sslcontext = SSLContext.getInstance("TLSv1.2");
+        sslcontext.init(null, null, null);
+	SSLSocketFactory NoSSLv3Factory = new NoSSLv3SocketFactory(sslcontext.getSocketFactory());
         mClient = mClient.newBuilder()
+          .sslSocketFactory(NoSSLv3Factory)
 	  .connectionPool(new ConnectionPool(5, seconds, TimeUnit.SECONDS))
           .connectTimeout(seconds, TimeUnit.SECONDS)
           .readTimeout(seconds, TimeUnit.SECONDS)
