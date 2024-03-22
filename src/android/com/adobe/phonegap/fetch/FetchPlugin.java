@@ -59,7 +59,7 @@ public class FetchPlugin extends CordovaPlugin {
     private OkHttpClient mClient = getUnsafeOkHttpClient();
     public static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
 
-    private static final long DEFAULT_TIMEOUT = 10;
+    private static final long DEFAULT_TIMEOUT = 3000;
 
 private static OkHttpClient getUnsafeOkHttpClient() {
   try {
@@ -82,7 +82,7 @@ private static OkHttpClient getUnsafeOkHttpClient() {
     };
 
     // Install the all-trusting trust manager
-    final SSLContext sslContext = SSLContext.getInstance("SSL");
+    final SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
     sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
     // Create an ssl socket factory with our all-trusting manager
     final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
