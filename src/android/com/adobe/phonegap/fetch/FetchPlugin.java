@@ -41,6 +41,23 @@ public class FetchPlugin extends CordovaPlugin {
     public static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
 
     private static final long DEFAULT_TIMEOUT = 10;
+
+    private SSLSocketFactory noSSLv3Factory;
+
+
+@Override
+    protected void pluginInitialize() {
+        super.pluginInitialize();
+        
+        // Initialize NoSSLv3SocketFactory
+        noSSLv3Factory = new NoSSLv3SocketFactory();
+        
+        // Initialize OkHttpClient with the custom SSLSocketFactory
+        mClient = new OkHttpClient.Builder()
+            .sslSocketFactory(noSSLv3Factory)
+            .build();
+    }
+
 	
 @Override
     public boolean execute(final String action, final JSONArray data, final CallbackContext callbackContext) {
