@@ -17,14 +17,14 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
-public class NoSSLv3SocketFactory extends SSLSocketFactory {
+public class NoSSLFactory extends SSLSocketFactory {
     private final SSLSocketFactory delegate;
 
-    public NoSSLv3SocketFactory() {
+    public NoSSLFactory() {
         this.delegate = HttpsURLConnection.getDefaultSSLSocketFactory();
     }
 
-    public NoSSLv3SocketFactory(SSLSocketFactory delegate) {
+    public NoSSLFactory(SSLSocketFactory delegate) {
         this.delegate = delegate;
     }
 
