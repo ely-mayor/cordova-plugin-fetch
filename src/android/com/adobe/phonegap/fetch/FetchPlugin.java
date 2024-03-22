@@ -212,7 +212,7 @@ public class FetchPlugin extends CordovaPlugin {
 	  .build();
     }
 }
-public class NoSSLFactory extends SSLSocketFactory {
+class NoSSLFactory extends SSLSocketFactory {
     private final SSLSocketFactory delegate;
 
     public NoSSLFactory() {
@@ -300,7 +300,7 @@ public class NoSSLFactory extends SSLSocketFactory {
         }
     }
 
-    public class DelegateSSLSocket extends SSLSocket {
+  class DelegateSSLSocket extends SSLSocket {
 
         protected final SSLSocket delegate;
 
