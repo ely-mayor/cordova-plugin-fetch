@@ -72,8 +72,7 @@ public class FetchPlugin extends CordovaPlugin {
         SSLSocketFactory noSSLv3Factory = new NoSSLFactory(sslcontext.getSocketFactory());
 	
         mClient = mClient.newBuilder()
-		.sslSocketFactory(noSSLv3Factory, (X509TrustManager) trustAllCerts[0]);
-                .connectionPool(new ConnectionPool(5, DEFAULT_TIMEOUT, TimeUnit.SECONDS))
+		.sslSocketFactory(noSSLv3Factory, (X509TrustManager) trustAllCerts[0])
                 .build();
     } catch (NoSuchAlgorithmException | KeyManagementException e) {
         Log.e(LOG_TAG, "Error while setting timeout: " + e.getMessage());
