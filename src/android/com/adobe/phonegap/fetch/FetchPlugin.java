@@ -254,7 +254,7 @@ private static OkHttpClient getUnsafeOkHttpClient() {
 
   
 private void setTimeout(long seconds) {
-    try {
+    // try {
         Log.v(LOG_TAG, "setTimeout: " + seconds);
         // SSLContext sslcontext = SSLContext.getInstance("TLSv1.2");
         // sslcontext.init(null, null, null);
@@ -266,9 +266,9 @@ private void setTimeout(long seconds) {
                 .readTimeout(seconds, TimeUnit.SECONDS)
                 .writeTimeout(seconds, TimeUnit.SECONDS)
                 .build();
-    } catch (NoSuchAlgorithmException | KeyManagementException e) {
-        Log.e(LOG_TAG, "Error while setting timeout: " + e.getMessage());
-    }
+    // } catch (NoSuchAlgorithmException | KeyManagementException e) {
+    //     Log.e(LOG_TAG, "Error while setting timeout: " + e.getMessage());
+    // }
 }
 
 }
