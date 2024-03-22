@@ -21,6 +21,9 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.net.ssl.SSLSocketFactory;
 
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+
 import okhttp3.Callback;
 import okhttp3.Headers;
 import okhttp3.MediaType;
