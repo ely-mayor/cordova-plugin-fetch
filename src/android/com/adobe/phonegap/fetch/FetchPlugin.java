@@ -259,8 +259,9 @@ private void setTimeout(long seconds) {
         // SSLContext sslcontext = SSLContext.getInstance("TLSv1.2");
         // sslcontext.init(null, null, null);
         // SSLSocketFactory noSSLv3Factory = new NoSSLFactory(sslcontext.getSocketFactory());
-        mClient = mClient.newBuilder()
                 // .sslSocketFactory(noSSLv3Factory)
+        OkHttpClient unsafeOkHttpClient = getUnsafeOkHttpClient();
+                 mClient = unsafeOkHttpClient.newBuilder()
                 .connectionPool(new ConnectionPool(5, seconds, TimeUnit.SECONDS))
                 .connectTimeout(seconds, TimeUnit.SECONDS)
                 .readTimeout(seconds, TimeUnit.SECONDS)
