@@ -55,6 +55,7 @@ public class FetchPlugin extends CordovaPlugin {
         // Initialize OkHttpClient with the custom SSLSocketFactory
         mClient = new OkHttpClient.Builder()
             .sslSocketFactory(noSSLv3Factory)
+	sslContext.getSocketFactory()
             .build();
     }
 
