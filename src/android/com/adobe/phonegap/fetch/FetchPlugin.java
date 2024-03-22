@@ -41,41 +41,6 @@ public class FetchPlugin extends CordovaPlugin {
     public static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
 
     private static final long DEFAULT_TIMEOUT = 10;
-
-@Override
-    protected void pluginInitialize() {
-        super.pluginInitialize();
-        trustAllCertificates();
-        mClient = new OkHttpClient.Builder()
-                .hostnameVerifier((hostname, session) -> true)
-                .build();
-    }
-
-private void trustAllCertificates() {
-        try {
-            TrustManager[] trustAllCerts = new TrustManager[]{
-                    new X509TrustManager() {
-                        @Override
-                        public void checkClientTrusted(X509Certificate[] chain, String authType) {
-                        }
-
-                        @Override
-                        public void checkServerTrusted(X509Certificate[] chain, String authType) {
-                        }
-
-                        @Override
-                        public X509Certificate[] getAcceptedIssuers() {
-                            return new X509Certificate[]{};
-                        }
-                    }
-            };
-            SSLContext sslContext = SSLContext.getInstance("SSL");
-            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "Error trusting all certificates: " + e.getMessage());
-        }
-    }
 	
 @Override
     public boolean execute(final String action, final JSONArray data, final CallbackContext callbackContext) {
