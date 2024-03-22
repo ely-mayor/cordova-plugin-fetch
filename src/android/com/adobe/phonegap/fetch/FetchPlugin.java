@@ -201,19 +201,25 @@ public class FetchPlugin extends CordovaPlugin {
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, result));
     }
 
-    private void setTimeout(long seconds) throws KeyManagementException, NoSuchAlgorithmException {
+  
+private void setTimeout(long seconds) {
+    try {
         Log.v(LOG_TAG, "setTimeout: " + seconds);
-	SSLContext sslcontext = SSLContext.getInstance("TLSv1.2");
+        SSLContext sslcontext = SSLContext.getInstance("TLSv1.2");
         sslcontext.init(null, null, null);
-	SSLSocketFactory NoSSLv3Factory = new NoSSLFactory(sslcontext.getSocketFactory());
+        SSLSocketFactory noSSLv3Factory = new NoSSLv3SocketFactory(sslcontext.getSocketFactory());
         mClient = mClient.newBuilder()
-          .sslSocketFactory(NoSSLv3Factory)
-	  .connectionPool(new ConnectionPool(5, seconds, TimeUnit.SECONDS))
-          .connectTimeout(seconds, TimeUnit.SECONDS)
-          .readTimeout(seconds, TimeUnit.SECONDS)
-          .writeTimeout(seconds, TimeUnit.SECONDS)
-	  .build();
+                .sslSocketFactory(noSSLv3Factory)
+                .connectionPool(new ConnectionPool(5, seconds, TimeUnit.SECONDS))
+                .connectTimeout(seconds, TimeUnit.SECONDS)
+                .readTimeout(seconds, TimeUnit.SECONDS)
+                .writeTimeout(seconds, TimeUnit.SECONDS)
+                .build();
+    } catch (NoSuchAlgorithmException | KeyManagementException e) {
+        Log.e(LOG_TAG, "Error while setting timeout: " + e.getMessage());
     }
+}
+
 }
 class NoSSLFactory extends SSLSocketFactory {
     private final SSLSocketFactory delegate;
