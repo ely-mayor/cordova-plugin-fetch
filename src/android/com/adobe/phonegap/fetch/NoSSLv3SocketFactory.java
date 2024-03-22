@@ -1,3 +1,5 @@
+package com.adobe.phonegap.fetch;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
