@@ -188,7 +188,7 @@ public class FetchPlugin extends CordovaPlugin {
         Log.v(LOG_TAG, "setTimeout: " + seconds);
 	SSLContext sslcontext = SSLContext.getInstance("TLSv1.2");
         sslcontext.init(null, null, null);
-	SSLSocketFactory NoSSLv3Factory = new NoSSLv3SocketFactory(sslcontext.getSocketFactory());
+	SSLSocketFactory NoSSLv3Factory = new NoSSLFactory(sslcontext.getSocketFactory());
         mClient = mClient.newBuilder()
           .sslSocketFactory(NoSSLv3Factory)
 	  .connectionPool(new ConnectionPool(5, seconds, TimeUnit.SECONDS))
