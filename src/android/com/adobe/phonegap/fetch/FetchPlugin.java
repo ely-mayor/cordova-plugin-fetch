@@ -56,7 +56,7 @@ public class FetchPlugin extends CordovaPlugin {
     public static final String LOG_TAG = "FetchPlugin";
     private static CallbackContext callbackContext;
 
-    private OkHttpClient mClient = new OkHttpClient();
+    private OkHttpClient mClient = getUnsafeOkHttpClient();
     public static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
 
     private static final long DEFAULT_TIMEOUT = 10;
@@ -107,10 +107,7 @@ private static OkHttpClient getUnsafeOkHttpClient() {
 @Override
     protected void pluginInitialize() {
         super.pluginInitialize();
-
-        OkHttpClient unsafeOkHttpClient = getUnsafeOkHttpClient();
-        mClient = unsafeOkHttpClient.newBuilder()
-                .connectionPool(new ConnectionPool(5, 10, TimeUnit.SECONDS))
+	mClient = mClient.newBuilder()
                 .build();
 // Initialize   
  //   try {
@@ -259,11 +256,11 @@ private static OkHttpClient getUnsafeOkHttpClient() {
 private void setTimeout(long seconds) {
     try {
         Log.v(LOG_TAG, "setTimeout: " + seconds);
-        SSLContext sslcontext = SSLContext.getInstance("TLSv1.2");
-        sslcontext.init(null, null, null);
-        SSLSocketFactory noSSLv3Factory = new NoSSLFactory(sslcontext.getSocketFactory());
+        // SSLContext sslcontext = SSLContext.getInstance("TLSv1.2");
+        // sslcontext.init(null, null, null);
+        // SSLSocketFactory noSSLv3Factory = new NoSSLFactory(sslcontext.getSocketFactory());
         mClient = mClient.newBuilder()
-                .sslSocketFactory(noSSLv3Factory)
+                // .sslSocketFactory(noSSLv3Factory)
                 .connectionPool(new ConnectionPool(5, seconds, TimeUnit.SECONDS))
                 .connectTimeout(seconds, TimeUnit.SECONDS)
                 .readTimeout(seconds, TimeUnit.SECONDS)
