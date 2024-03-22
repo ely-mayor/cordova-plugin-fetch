@@ -67,7 +67,7 @@ public class FetchPlugin extends CordovaPlugin {
         
 // Initialize   
    try {
-        SSLContext sslcontext = SSLContext.getInstance("SSL");
+	SSLContext sslContext = SSLContext.getInstance("TLSv1.3");
         sslcontext.init(null, null, null);
         SSLSocketFactory noSSLv3Factory = new NoSSLFactory(sslcontext.getSocketFactory());
         mClient = mClient.newBuilder()
