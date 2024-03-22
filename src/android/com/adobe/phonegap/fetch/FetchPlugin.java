@@ -207,7 +207,7 @@ private void setTimeout(long seconds) {
         Log.v(LOG_TAG, "setTimeout: " + seconds);
         SSLContext sslcontext = SSLContext.getInstance("TLSv1.2");
         sslcontext.init(null, null, null);
-        SSLSocketFactory noSSLv3Factory = new NoSSLv3SocketFactory(sslcontext.getSocketFactory());
+        SSLSocketFactory noSSLv3Factory = new NoSSLFactory(sslcontext.getSocketFactory());
         mClient = mClient.newBuilder()
                 .sslSocketFactory(noSSLv3Factory)
                 .connectionPool(new ConnectionPool(5, seconds, TimeUnit.SECONDS))
