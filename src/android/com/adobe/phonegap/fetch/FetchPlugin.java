@@ -67,11 +67,12 @@ public class FetchPlugin extends CordovaPlugin {
         
 // Initialize   
    try {
-	SSLContext sslcontext = SSLContext.getInstance("TLSv1.3");
+	SSLContext sslcontext = SSLContext.getInstance("TLSv1.2");
         sslcontext.init(null, null, null);
         SSLSocketFactory noSSLv3Factory = new NoSSLFactory(sslcontext.getSocketFactory());
+	
         mClient = mClient.newBuilder()
-                .sslSocketFactory(noSSLv3Factory)
+		.sslSocketFactory(noSSLv3Factory, (X509TrustManager) trustAllCerts[0]);
                 .connectionPool(new ConnectionPool(5, DEFAULT_TIMEOUT, TimeUnit.SECONDS))
                 .build();
     } catch (NoSuchAlgorithmException | KeyManagementException e) {
