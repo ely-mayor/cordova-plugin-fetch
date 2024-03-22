@@ -198,7 +198,7 @@ public class FetchPlugin extends CordovaPlugin {
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, result));
     }
 
-    private void setTimeout(long seconds) {
+    private void setTimeout(long seconds) throws KeyManagementException, NoSuchAlgorithmException {
         Log.v(LOG_TAG, "setTimeout: " + seconds);
 	SSLContext sslcontext = SSLContext.getInstance("TLSv1.2");
         sslcontext.init(null, null, null);
