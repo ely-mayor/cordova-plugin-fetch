@@ -35,7 +35,7 @@ public class FetchPlugin extends CordovaPlugin {
     private OkHttpClient mClient = new OkHttpClient();
     public static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
 
-    private static final long DEFAULT_TIMEOUT = 180;
+    private static final long DEFAULT_TIMEOUT = 10;
 	
 @Override
     public boolean execute(final String action, final JSONArray data, final CallbackContext callbackContext) {
