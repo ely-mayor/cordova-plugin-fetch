@@ -62,7 +62,7 @@ public class FetchPlugin extends CordovaPlugin {
 	} catch (UnknownHostException e) {
    		e.printStackTrace(); // or handle the exception in a meaningful way
 	}
-        mClient = bootstrapClient.newBuilder().dns(dns).build();
+        // mClient = bootstrapClient.newBuilder().dns(dns).build();
 	System.out.println("Executed");
         if (action.equals("fetch")) {
             cordova.getThreadPool().execute(new Runnable() {
