@@ -23,6 +23,10 @@ import okhttp3.ConnectionPool;
 import okhttp3.ConnectionSpec;
 import okhttp3.Dns;
 import okhttp3.Cache;
+import okhttp3.dnsoverhttps.DnsOverHttps;
+import okhttp3.HttpUrl;
+import java.io.File;
+import java.net.InetAddress;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,7 +66,7 @@ public class FetchPlugin extends CordovaPlugin {
 
 	Dns dns = new DnsOverHttps.Builder().client(bootstrapClient)
                 .url(HttpUrl.get("https://cloudflare-dns.com/dns-query"))
-                .bootstrapDnsHosts(getByIp("1.1.1.1"), getByIp("1.0.0.1"))
+                .bootstrapDnsHosts(InetAddress.getByName("1.1.1.1"), InetAddress.getByName("1.0.0.1"))
                 .includeIPv6(true)
                 .post(true)
                 .build();
