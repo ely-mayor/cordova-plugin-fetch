@@ -52,8 +52,9 @@ public class FetchPlugin extends CordovaPlugin {
 @Override
     public boolean execute(final String action, final JSONArray data, final CallbackContext callbackContext)  {
 	OkHttpClient bootstrapClient = new OkHttpClient.Builder().build();
+	Dns dns;
 	try {
-		Dns dns = new DnsOverHttps.Builder().client(bootstrapClient)
+		dns = new DnsOverHttps.Builder().client(bootstrapClient)
     		.url(HttpUrl.get("https://cloudflare-dns.com/dns-query"))
 		.bootstrapDnsHosts(InetAddress.getByName("1.1.1.1"), InetAddress.getByName("1.0.0.1"))
 		.includeIPv6(true)
