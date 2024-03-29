@@ -27,6 +27,7 @@ import okhttp3.dnsoverhttps.DnsOverHttps;
 import okhttp3.HttpUrl;
 import java.io.File;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,12 +65,23 @@ public class FetchPlugin extends CordovaPlugin {
                 .followSslRedirects(false)
                 .build();
 
-	Dns dns = new DnsOverHttps.Builder().client(bootstrapClient)
-                .url(HttpUrl.get("https://cloudflare-dns.com/dns-query"))
-                .bootstrapDnsHosts(InetAddress.getByName("1.1.1.1"), InetAddress.getByName("1.0.0.1"))
-                .includeIPv6(true)
-                .post(true)
-                .build();
+	// Dns dns = new DnsOverHttps.Builder().client(bootstrapClient)
+ //                .url(HttpUrl.get("https://cloudflare-dns.com/dns-query"))
+ //                .bootstrapDnsHosts(InetAddress.getByName("1.1.1.1"), InetAddress.getByName("1.0.0.1"))
+ //                .includeIPv6(true)
+ //                .post(true)
+ //                .build();
+	Dns dns;
+	try {
+   	  dns = new DnsOverHttps.Builder().client(bootstrapClient)
+            .url(HttpUrl.get("https://cloudflare-dns.com/dns-query"))
+            .bootstrapDnsHosts(InetAddress.getByName("1.1.1.1"), InetAddress.getByName("1.0.0.1"))
+            .includeIPv6(true)
+            .post(true)
+            .build();
+} catch (UnknownHostException e) {
+    e.printStackTrace(); // or handle the exception in a meaningful way
+}
 
         mClient = bootstrapClient.newBuilder().dns(dns).build();
     }
