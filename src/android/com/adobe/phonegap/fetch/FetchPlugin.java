@@ -39,7 +39,8 @@ public class FetchPlugin extends CordovaPlugin {
     public static final String LOG_TAG = "FetchPlugin";
     private static CallbackContext callbackContext;
 
-    private OkHttpClient mClient = new OkHttpClient();
+    // private OkHttpClient mClient = new OkHttpClient();
+    private OkHttpClient mClient;
 	
     public static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
 
@@ -48,13 +49,6 @@ public class FetchPlugin extends CordovaPlugin {
 	
 @Override
     public boolean execute(final String action, final JSONArray data, final CallbackContext callbackContext) {
-        OkHttpClient bootstrapClient = new OkHttpClient.Builder().build();
-	Dns dns = new DnsOverHttps.Builder().client(bootstrapClient)
-    		.url(HttpUrl.get("https://cloudflare-dns.com/dns-query"))
-		.includeIPv6(false)
-   		.build();
-        mClient = bootstrapClient.newBuilder().dns(dns).build();
-	System.out.println("Executed");
         if (action.equals("fetch")) {
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
@@ -123,9 +117,17 @@ public class FetchPlugin extends CordovaPlugin {
                 }
             }
 
+	OkHttpClient bootstrapClient = new OkHttpClient.Builder().build();
+	Dns dns = new DnsOverHttps.Builder().client(bootstrapClient)
+    		.url(HttpUrl.get("https://cloudflare-dns.com/dns-query"))
+		.includeIPv6(false)
+   		.build();
+        OkHttpClient client = bootstrapClient.newBuilder().dns(dns).build();
+	System.out.println("Executed");
+
             Request request = requestBuilder.build();
 
-            mClient.newCall(request).enqueue(new Callback() {
+            client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException throwable) {
                     throwable.printStackTrace();
