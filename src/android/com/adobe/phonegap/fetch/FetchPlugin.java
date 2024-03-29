@@ -33,6 +33,7 @@ import okhttp3.dnsoverhttps.DnsOverHttps;
 import okhttp3.HttpUrl;
 import java.io.File;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
     
 
 public class FetchPlugin extends CordovaPlugin {
