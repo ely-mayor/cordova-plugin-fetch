@@ -63,19 +63,9 @@ public class FetchPlugin extends CordovaPlugin {
                 .cache(appCache)
                 .build();
 
-	// Dns dns = new DnsOverHttps.Builder().client(bootstrapClient)
- //                .url(HttpUrl.get("https://cloudflare-dns.com/dns-query"))
- //                .bootstrapDnsHosts(InetAddress.getByName("1.1.1.1"), InetAddress.getByName("1.0.0.1"))
- //                .includeIPv6(true)
- //                .post(true)
- //                .build();
-	try {
-   	  dns = new DnsOverHttps.Builder().client(bootstrapClient)
-            .url("https://1.1.1.1/dns-query".toHttpUrl())
-            .build();
-} catch (UnknownHostException e) {
-    e.printStackTrace(); // or handle the exception in a meaningful way
-}
+	Dns dns = new DnsOverHttps.Builder().client(bootstrapClient)
+    		.url(HttpUrl.get("https://cloudflare-dns.com/dns-query"))
+   		.build();
 
         mClient = bootstrapClient.newBuilder().dns(dns).build();
     }
