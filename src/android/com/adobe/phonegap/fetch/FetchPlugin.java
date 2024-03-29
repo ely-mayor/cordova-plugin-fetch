@@ -78,6 +78,7 @@ public class FetchPlugin extends CordovaPlugin {
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
                     fetchOperation(data, callbackContext);
+		    pluginInitialize();
                 }
             });
             return true;
