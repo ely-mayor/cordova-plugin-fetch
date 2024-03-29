@@ -37,16 +37,14 @@ public class FetchPlugin extends CordovaPlugin {
 
     private static final long DEFAULT_TIMEOUT = 30;
 
-// @Override
-//     protected void pluginInitialize() {
-//         super.pluginInitialize();
-//         mClient = new OkHttpClient.Builder()
-// 		.connectionPool(new ConnectionPool(10, DEFAULT_TIMEOUT, TimeUnit.SECONDS))
-//                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-//                 .readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-//                 .writeTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-//                 .build();
-//     }
+@Override
+    protected void pluginInitialize() {
+        super.pluginInitialize();
+        mClient = new OkHttpClient.Builder()
+		.connectionPool(new ConnectionPool(10, DEFAULT_TIMEOUT, TimeUnit.SECONDS))
+                .connectionSpecs(Arrays.asList(ConnectionSpec.MODERN_TLS))
+                .build();
+    }
 	
 @Override
     public boolean execute(final String action, final JSONArray data, final CallbackContext callbackContext) {
