@@ -68,8 +68,6 @@ public class FetchPlugin extends CordovaPlugin {
    		.build();
 
         mClient = bootstrapClient.newBuilder().dns(dns).build();
-
-	System.out.println('hello');
     }
 	
 @Override
@@ -77,8 +75,9 @@ public class FetchPlugin extends CordovaPlugin {
         if (action.equals("fetch")) {
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
-                    fetchOperation(data, callbackContext);
 		    pluginInitialize();
+                    fetchOperation(data, callbackContext);
+		 
                 }
             });
             return true;
