@@ -8,4 +8,5 @@ repositories {
 dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     implementation 'com.squareup.okhttp3:okhttp-dnsoverhttps:4.9.0'
+    implementation 'dnsjava:dnsjava:2.1.7'
 }
