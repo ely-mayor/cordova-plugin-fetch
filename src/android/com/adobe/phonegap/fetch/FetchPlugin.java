@@ -20,14 +20,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.Call;
 import okhttp3.ConnectionPool;
-import okhttp3.ConnectionSpec;
-import okhttp3.Dns;
-import okhttp3.Cache;
-import okhttp3.dnsoverhttps.DnsOverHttps;
-import okhttp3.HttpUrl;
-import java.io.File;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,42 +32,18 @@ public class FetchPlugin extends CordovaPlugin {
     public static final String LOG_TAG = "FetchPlugin";
     private static CallbackContext callbackContext;
 
-    // private OkHttpClient mClient = new OkHttpClient();
+    private OkHttpClient mClient = new OkHttpClient();
 	
-    private OkHttpClient mClient;
     public static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
 
     private static final long DEFAULT_TIMEOUT = 30;
-    private Dns dns;
-	
 
-
-@Override
-    protected void pluginInitialize() {
-        super.pluginInitialize();
-  //       mClient = new OkHttpClient.Builder()
-		// .connectionPool(new ConnectionPool(10, DEFAULT_TIMEOUT, TimeUnit.SECONDS))
-  //               .connectionSpecs(Arrays.asList(ConnectionSpec.MODERN_TLS))
-  //               .build();
-	    
-	Cache appCache = new Cache(new File("cacheDir", "okhttpcache"), 10 * 1024 * 1024);
-        OkHttpClient bootstrapClient = new OkHttpClient.Builder()
-                .cache(appCache)
-                .build();
-
-	Dns dns = new DnsOverHttps.Builder().client(bootstrapClient)
-    		.url(HttpUrl.get("https://cloudflare-dns.com/dns-query"))
-   		.build();
-
-        mClient = bootstrapClient.newBuilder().dns(dns).build();
-    }
 	
 @Override
     public boolean execute(final String action, final JSONArray data, final CallbackContext callbackContext) {
         if (action.equals("fetch")) {
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
-		    pluginInitialize();
                     fetchOperation(data, callbackContext);
 		 
                 }
