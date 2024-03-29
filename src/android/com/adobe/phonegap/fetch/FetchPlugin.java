@@ -21,8 +21,8 @@ import okhttp3.Response;
 import okhttp3.Call;
 import okhttp3.ConnectionPool;
 import okhttp3.ConnectionSpec;
-import okhttp3.Dns
-import okhttp3.Cache
+import okhttp3.Dns;
+import okhttp3.Cache;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,10 +41,6 @@ public class FetchPlugin extends CordovaPlugin {
     public static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
 
     private static final long DEFAULT_TIMEOUT = 30;
-
-    val appCache = Cache(new File("cacheDir", "okhttpcache"), 10 * 1024 * 1024)
-    val bootstrapClient = OkHttpClient.Builder().cache(appCache).build()
-
 
 
 @Override
