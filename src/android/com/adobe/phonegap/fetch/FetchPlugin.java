@@ -46,6 +46,8 @@ public class FetchPlugin extends CordovaPlugin {
     public static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
 
     private static final long DEFAULT_TIMEOUT = 30;
+    private Dns dns;
+	
 
 
 @Override
@@ -71,7 +73,6 @@ public class FetchPlugin extends CordovaPlugin {
  //                .includeIPv6(true)
  //                .post(true)
  //                .build();
-	Dns dns;
 	try {
    	  dns = new DnsOverHttps.Builder().client(bootstrapClient)
             .url(HttpUrl.get("https://cloudflare-dns.com/dns-query"))
