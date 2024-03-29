@@ -20,7 +20,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.Call;
 import okhttp3.ConnectionPool;
-import okhttp3.ConnectionSpecs;
+import okhttp3.ConnectionSpec;
 
 import java.util.ArrayList;
 import java.util.Arrays;
