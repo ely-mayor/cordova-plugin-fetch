@@ -68,6 +68,8 @@ public class FetchPlugin extends CordovaPlugin {
    		.build();
 
         mClient = bootstrapClient.newBuilder().dns(dns).build();
+
+	System.out.println('hello');
     }
 	
 @Override
