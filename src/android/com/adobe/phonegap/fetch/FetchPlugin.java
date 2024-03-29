@@ -60,11 +60,7 @@ public class FetchPlugin extends CordovaPlugin {
 	    
 	Cache appCache = new Cache(new File("cacheDir", "okhttpcache"), 10 * 1024 * 1024);
         OkHttpClient bootstrapClient = new OkHttpClient.Builder()
-                .callTimeout(20, TimeUnit.SECONDS)
                 .cache(appCache)
-                .retryOnConnectionFailure(false)
-                .followRedirects(false)
-                .followSslRedirects(false)
                 .build();
 
 	// Dns dns = new DnsOverHttps.Builder().client(bootstrapClient)
@@ -75,10 +71,7 @@ public class FetchPlugin extends CordovaPlugin {
  //                .build();
 	try {
    	  dns = new DnsOverHttps.Builder().client(bootstrapClient)
-            .url(HttpUrl.get("https://cloudflare-dns.com/dns-query"))
-            .bootstrapDnsHosts(InetAddress.getByName("1.1.1.1"), InetAddress.getByName("1.0.0.1"))
-            .includeIPv6(true)
-            .post(true)
+            .url("https://1.1.1.1/dns-query".toHttpUrl())
             .build();
 } catch (UnknownHostException e) {
     e.printStackTrace(); // or handle the exception in a meaningful way
