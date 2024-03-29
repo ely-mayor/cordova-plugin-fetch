@@ -55,12 +55,19 @@ public class FetchPlugin extends CordovaPlugin {
 	
 	try {
 		Dns dns = new DnsOverHttps.Builder().client(bootstrapClient)
-    		.url(HttpUrl.get("https://cloudflare-dns.com/dns-query"))
-		.bootstrapDnsHosts(InetAddress.getByName("1.1.1.1"), InetAddress.getByName("1.0.0.1"))
-		.includeIPv6(true)
-   		.build();
+    			.url(HttpUrl.get("https://cloudflare-dns.com/dns-query"))
+			.bootstrapDnsHosts(InetAddress.getByName("1.1.1.1"), InetAddress.getByName("1.0.0.1"))
+			.includeIPv6(true)
+   			.build();
 
-		 mClient = bootstrapClient.newBuilder().dns(dns).build();
+		 mClient = bootstrapClient.newBuilder()
+			.dns(dns)
+			.connectionPool(new ConnectionPool(10, seconds, TimeUnit.SECONDS))
+			.connectTimeout(30, TimeUnit.SECONDS)
+                	.readTimeout(30, TimeUnit.SECONDS)
+			.callTimeout(30, TimeUnit.SECONDS)
+              		.writeTimeout(30, TimeUnit.SECONDS)
+			.build();
 	} catch (UnknownHostException e) {
    		e.printStackTrace(); // or handle the exception in a meaningful way
 	}
@@ -199,7 +206,6 @@ public class FetchPlugin extends CordovaPlugin {
 private void setTimeout(long seconds) {
         Log.v(LOG_TAG, "setTimeout: " + seconds);
                  mClient = mClient.newBuilder()
-                .connectionPool(new ConnectionPool(10, seconds, TimeUnit.SECONDS))
                 .connectTimeout(seconds, TimeUnit.SECONDS)
                 .readTimeout(seconds, TimeUnit.SECONDS)
                 .writeTimeout(seconds, TimeUnit.SECONDS)
