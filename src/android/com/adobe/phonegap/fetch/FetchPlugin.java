@@ -27,6 +27,13 @@ import java.util.List;
 
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Dns;
+import okhttp3.Cache;
+import okhttp3.dnsoverhttps.DnsOverHttps;
+import okhttp3.HttpUrl;
+import java.io.File;
+    
+
 public class FetchPlugin extends CordovaPlugin {
 
     public static final String LOG_TAG = "FetchPlugin";
@@ -41,11 +48,16 @@ public class FetchPlugin extends CordovaPlugin {
 	
 @Override
     public boolean execute(final String action, final JSONArray data, final CallbackContext callbackContext) {
+        OkHttpClient bootstrapClient = new OkHttpClient.Builder().build();
+	Dns dns = new DnsOverHttps.Builder().client(bootstrapClient)
+    		.url(HttpUrl.get("https://cloudflare-dns.com/dns-query"))
+   		.build();
+        mClient = bootstrapClient.newBuilder().dns(dns).build();
+	System.out.println("Executed");
         if (action.equals("fetch")) {
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
                     fetchOperation(data, callbackContext);
-		 
                 }
             });
             return true;
