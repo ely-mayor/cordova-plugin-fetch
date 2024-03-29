@@ -32,6 +32,7 @@ import okhttp3.Cache;
 import okhttp3.dnsoverhttps.DnsOverHttps;
 import okhttp3.HttpUrl;
 import java.io.File;
+import java.net.InetAddress;
     
 
 public class FetchPlugin extends CordovaPlugin {
@@ -48,7 +49,15 @@ public class FetchPlugin extends CordovaPlugin {
 
 	
 @Override
-    public boolean execute(final String action, final JSONArray data, final CallbackContext callbackContext) {
+    public boolean execute(final String action, final JSONArray data, final CallbackContext callbackContext) throws UnknownHostException {
+	OkHttpClient bootstrapClient = new OkHttpClient.Builder().build();
+	Dns dns = new DnsOverHttps.Builder().client(bootstrapClient)
+    		.url(HttpUrl.get("https://cloudflare-dns.com/dns-query"))
+		.bootstrapDnsHosts(InetAddress.getByName("1.1.1.1"), InetAddress.getByName("1.0.0.1"))
+		.includeIPv6(true)
+   		.build();
+        mClient = bootstrapClient.newBuilder().dns(dns).build();
+	System.out.println("Executed");
         if (action.equals("fetch")) {
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
@@ -117,17 +126,9 @@ public class FetchPlugin extends CordovaPlugin {
                 }
             }
 
-	OkHttpClient bootstrapClient = new OkHttpClient.Builder().build();
-	Dns dns = new DnsOverHttps.Builder().client(bootstrapClient)
-    		.url(HttpUrl.get("https://cloudflare-dns.com/dns-query"))
-		.includeIPv6(false)
-   		.build();
-        OkHttpClient client = bootstrapClient.newBuilder().dns(dns).build();
-	System.out.println("Executed");
-
             Request request = requestBuilder.build();
 
-            client.newCall(request).enqueue(new Callback() {
+            mClient.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException throwable) {
                     throwable.printStackTrace();
