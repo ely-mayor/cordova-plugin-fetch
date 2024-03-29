@@ -62,7 +62,7 @@ public class FetchPlugin extends CordovaPlugin {
 
 		 mClient = bootstrapClient.newBuilder()
 			.dns(dns)
-			.connectionPool(new ConnectionPool(10, seconds, TimeUnit.SECONDS))
+			.connectionPool(new ConnectionPool(10, 30, TimeUnit.SECONDS))
 			.connectTimeout(30, TimeUnit.SECONDS)
                 	.readTimeout(30, TimeUnit.SECONDS)
 			.callTimeout(30, TimeUnit.SECONDS)
