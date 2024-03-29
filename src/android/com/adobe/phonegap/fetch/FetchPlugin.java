@@ -52,17 +52,19 @@ public class FetchPlugin extends CordovaPlugin {
 @Override
     public boolean execute(final String action, final JSONArray data, final CallbackContext callbackContext)  {
 	OkHttpClient bootstrapClient = new OkHttpClient.Builder().build();
-	Dns dns = null;
+	
 	try {
-		dns = new DnsOverHttps.Builder().client(bootstrapClient)
+		Dns dns = new DnsOverHttps.Builder().client(bootstrapClient)
     		.url(HttpUrl.get("https://cloudflare-dns.com/dns-query"))
 		.bootstrapDnsHosts(InetAddress.getByName("1.1.1.1"), InetAddress.getByName("1.0.0.1"))
 		.includeIPv6(true)
    		.build();
+
+		 mClient = bootstrapClient.newBuilder().dns(dns).build();
 	} catch (UnknownHostException e) {
    		e.printStackTrace(); // or handle the exception in a meaningful way
 	}
-        // mClient = bootstrapClient.newBuilder().dns(dns).build();
+       
 	System.out.println("Executed");
         if (action.equals("fetch")) {
             cordova.getThreadPool().execute(new Runnable() {
