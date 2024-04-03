@@ -21,28 +21,14 @@ import okhttp3.Response;
 import okhttp3.Call;
 import okhttp3.ConnectionPool;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import java.util.concurrent.TimeUnit;
-
-import okhttp3.Dns;
-import okhttp3.Cache;
-import okhttp3.dnsoverhttps.DnsOverHttps;
-import okhttp3.HttpUrl;
-import java.io.File;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-    
 
 public class FetchPlugin extends CordovaPlugin {
 
     public static final String LOG_TAG = "FetchPlugin";
     private static CallbackContext callbackContext;
 
-    // private OkHttpClient mClient = new OkHttpClient();
-    private OkHttpClient mClient;
+    private OkHttpClient mClient = new OkHttpClient();
 	
     public static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
 
@@ -51,28 +37,6 @@ public class FetchPlugin extends CordovaPlugin {
 	
 @Override
     public boolean execute(final String action, final JSONArray data, final CallbackContext callbackContext)  {
-	OkHttpClient bootstrapClient = new OkHttpClient.Builder().build();
-	
-	try {
-		Dns dns = new DnsOverHttps.Builder().client(bootstrapClient)
-    			.url(HttpUrl.get("https://cloudflare-dns.com/dns-query"))
-			.bootstrapDnsHosts(InetAddress.getByName("1.1.1.1"), InetAddress.getByName("1.0.0.1"))
-			.includeIPv6(true)
-   			.build();
-
-		 mClient = bootstrapClient.newBuilder()
-			.dns(dns)
-			.connectionPool(new ConnectionPool(10, 30, TimeUnit.SECONDS))
-			.connectTimeout(30, TimeUnit.SECONDS)
-                	.readTimeout(30, TimeUnit.SECONDS)
-			.callTimeout(30, TimeUnit.SECONDS)
-              		.writeTimeout(30, TimeUnit.SECONDS)
-			.build();
-	} catch (UnknownHostException e) {
-   		e.printStackTrace(); // or handle the exception in a meaningful way
-	}
-       
-	System.out.println("Executed");
         if (action.equals("fetch")) {
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
@@ -206,6 +170,7 @@ public class FetchPlugin extends CordovaPlugin {
 private void setTimeout(long seconds) {
         Log.v(LOG_TAG, "setTimeout: " + seconds);
                  mClient = mClient.newBuilder()
+		.connectionPool(new ConnectionPool(10, seconds, TimeUnit.SECONDS))
                 .connectTimeout(seconds, TimeUnit.SECONDS)
                 .readTimeout(seconds, TimeUnit.SECONDS)
                 .writeTimeout(seconds, TimeUnit.SECONDS)
