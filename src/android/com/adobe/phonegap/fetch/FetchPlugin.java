@@ -181,13 +181,23 @@ private void setTimeout(long seconds) {
 
     }
 
-private void cancelAllRequests(final CallbackContext callbackContext) {
-    try {
-        mClient.dispatcher().cancelAll();
-        callbackContext.success("All requests canceled.");
-    } catch (Exception e) {
-        // If there's an exception during cancellation, return it as an error
-        callbackContext.error("Error cancelling requests: " + e.getMessage());
+// private void cancelAllRequests(final CallbackContext callbackContext) {
+//     try {
+//         mClient.dispatcher().cancelAll();
+//         callbackContext.success("All requests canceled.");
+//     } catch (Exception e) {
+//         // If there's an exception during cancellation, return it as an error
+//         callbackContext.error("Error cancelling requests: " + e.getMessage());
+//     }
+// }
+ private void cancelAllRequests(OkHttpClient client, CallbackContext callbackContext) {
+        for(Call call : client.dispatcher().queuedCalls()) {
+                call.cancelAll();
+        }
+        for(Call call : client.dispatcher().runningCalls()) {
+                call.cancelAll();
+        }
+	callbackContext.success("All requests canceled.");
     }
 }
 	
