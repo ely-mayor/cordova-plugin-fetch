@@ -48,8 +48,8 @@ public class FetchPlugin extends CordovaPlugin {
         } else if (action.equals("setTimeout")) {
             this.setTimeout(data.optLong(0, DEFAULT_TIMEOUT));
             return true;
-	} else if (action.equals("cancelAllRequests")) {
-            cancelAllRequests(mClient, callbackContext, "test");
+	} else if (action.equals("cancelCallWithTag")) {
+            cancelCallWithTag(mClient, callbackContext, "test");
             return true;
         } else {
             Log.e(LOG_TAG, "Invalid action: " + action);
@@ -191,17 +191,22 @@ private void setTimeout(long seconds) {
 //         callbackContext.error("Error cancelling requests: " + e.getMessage());
 //     }
 // }
- private void cancelAllRequests(OkHttpClient client, CallbackContext callbackContext,  String tag) {
-        for(Call call : client.dispatcher().queuedCalls()) {
-            if(tag.equals(call.request().tag()))
+private void cancelCallWithTag(OkHttpClient client, CallbackContext callbackContext, String tag) {
+    try {
+        for (Call call : client.dispatcher().queuedCalls()) {
+            if (tag.equals(call.request().tag()))
                 call.cancel();
         }
-        for(Call call : client.dispatcher().runningCalls()) {
-            if(tag.equals(call.request().tag()))
+        for (Call call : client.dispatcher().runningCalls()) {
+            if (tag.equals(call.request().tag()))
                 call.cancel();
         }
-	callbackContext.success("All requests canceled.");
+        callbackContext.success("All requests with tag: " + tag + " canceled.");
+    } catch (Exception e) {
+        // If there's an exception during cancellation, return it as an error
+        callbackContext.error("Error cancelling requests: " + e.getMessage());
     }
+ }
 }
 
 
