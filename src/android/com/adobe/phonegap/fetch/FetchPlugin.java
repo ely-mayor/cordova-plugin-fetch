@@ -180,9 +180,16 @@ private void setTimeout(long seconds) {
                 .build();
 
     }
+
 private void cancelAllRequests(final CallbackContext callbackContext) {
+    try {
         mClient.dispatcher().cancelAll();
         callbackContext.success("All requests canceled.");
+    } catch (Exception e) {
+        // If there's an exception during cancellation, return it as an error
+        callbackContext.error("Error cancelling requests: " + e.getMessage());
     }
+}
+	
 }
 
