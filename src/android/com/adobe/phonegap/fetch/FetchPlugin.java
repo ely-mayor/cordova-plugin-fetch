@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 public class FetchPlugin extends CordovaPlugin {
 
     public static final String LOG_TAG = "FetchPlugin";
+	
     private static CallbackContext callbackContext;
 
     private OkHttpClient mClient = new OkHttpClient();
@@ -108,7 +109,7 @@ public class FetchPlugin extends CordovaPlugin {
                 }
             }
 
-            Request request = requestBuilder.build();
+            Request request = requestBuilder.tag("test").build();
 
             mClient.newCall(request).enqueue(new Callback() {
                 @Override
@@ -192,9 +193,11 @@ private void setTimeout(long seconds) {
 // }
  private void cancelAllRequests(OkHttpClient client, CallbackContext callbackContext) {
         for(Call call : client.dispatcher().queuedCalls()) {
+            if(tag.equals(call.request().tag()))
                 call.cancel();
         }
         for(Call call : client.dispatcher().runningCalls()) {
+            if(tag.equals(call.request().tag()))
                 call.cancel();
         }
 	callbackContext.success("All requests canceled.");
