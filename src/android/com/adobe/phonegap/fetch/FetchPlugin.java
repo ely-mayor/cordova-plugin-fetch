@@ -200,6 +200,5 @@ private void setTimeout(long seconds) {
 	callbackContext.success("All requests canceled.");
     }
 }
-	
-}
+
 
