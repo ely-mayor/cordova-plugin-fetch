@@ -62,7 +62,7 @@ public class FetchPlugin extends CordovaPlugin {
                  public void run() {
                 try {
                     String tag = data.getString(0);
-                    cancelCallWithTag(tag, callbackContext);
+                    cancelCallWithTag(callbackContext, tag);
                 } catch (JSONException e) {
                     callbackContext.error("Error parsing tag: " + e.getMessage());
                 }
