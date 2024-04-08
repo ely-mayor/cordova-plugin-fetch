@@ -349,6 +349,10 @@
   cordovaFetch.fetch.setTimeout = function(timeout) {
     exec(null, null, "FetchPlugin", "setTimeout", [timeout]);
   }
+  
+   cordovaFetch.fetch.cancelAllRequests = function(successCallback, errorCallback) {
+    exec(successCallback, errorCallback, "FetchPlugin", "cancelAllRequests", []);
+  }
 
   cordovaFetch.fetch.polyfill = true
 
