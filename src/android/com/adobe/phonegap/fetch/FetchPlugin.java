@@ -48,7 +48,7 @@ public class FetchPlugin extends CordovaPlugin {
             this.setTimeout(data.optLong(0, DEFAULT_TIMEOUT));
             return true;
 	} else if (action.equals("cancelAllRequests")) {
-            cancelAllRequests(callbackContext);
+            cancelAllRequests(mClient, callbackContext);
             return true;
         } else {
             Log.e(LOG_TAG, "Invalid action: " + action);
