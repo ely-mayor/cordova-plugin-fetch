@@ -350,7 +350,7 @@
     exec(null, null, "FetchPlugin", "setTimeout", [timeout]);
   }
   
-   cordovaFetch.fetch.cancelAllRequests = function(successCallback, errorCallback) {
+  cordovaFetch.fetch.cancelAllRequests = function(successCallback, errorCallback) {
     exec(successCallback, errorCallback, "FetchPlugin", "cancelAllRequests", []);
   }
 
