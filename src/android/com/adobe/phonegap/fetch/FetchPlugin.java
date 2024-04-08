@@ -192,10 +192,10 @@ private void setTimeout(long seconds) {
 // }
  private void cancelAllRequests(OkHttpClient client, CallbackContext callbackContext) {
         for(Call call : client.dispatcher().queuedCalls()) {
-                call.cancelAll();
+                call.cancel();
         }
         for(Call call : client.dispatcher().runningCalls()) {
-                call.cancelAll();
+                call.cancel();
         }
 	callbackContext.success("All requests canceled.");
     }
