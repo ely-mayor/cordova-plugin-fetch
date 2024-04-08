@@ -354,6 +354,10 @@
     exec(successCallback, errorCallback, "FetchPlugin", "cancelCallWithTag", [tag]);
   }
   
+  cordovaFetch.fetch.cancelAllRequests = function(successCallback, errorCallback) {
+    exec(successCallback, errorCallback, "FetchPlugin", "cancelAllRequests", []);
+  }
+  
   cordovaFetch.fetch.polyfill = true
 
   module.exports = cordovaFetch.fetch;
