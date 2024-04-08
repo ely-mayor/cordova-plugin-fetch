@@ -177,5 +177,9 @@ private void setTimeout(long seconds) {
                 .build();
 
     }
+private void cancelAllRequests(final CallbackContext callbackContext) {
+        mClient.dispatcher().cancelAll();
+        callbackContext.success("All requests canceled.");
+    }
 }
 
