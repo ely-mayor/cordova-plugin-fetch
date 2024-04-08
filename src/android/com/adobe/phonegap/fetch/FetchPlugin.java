@@ -29,6 +29,8 @@ public class FetchPlugin extends CordovaPlugin {
 	
     private static CallbackContext callbackContext;
 
+    public final static String TAG = "test";
+
     private OkHttpClient mClient = new OkHttpClient();
 	
     public static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
@@ -48,9 +50,25 @@ public class FetchPlugin extends CordovaPlugin {
         } else if (action.equals("setTimeout")) {
             this.setTimeout(data.optLong(0, DEFAULT_TIMEOUT));
             return true;
+	} else if (action.equals("cancelAllRequests")) {
+  	    cordova.getThreadPool().execute(new Runnable() {
+       		 public void run() {
+            cancelAllRequests(callbackContext);
+       	     }
+   	    });
+   	   return true;
 	} else if (action.equals("cancelCallWithTag")) {
-            cancelCallWithTag(mClient, callbackContext, "test");
-            return true;
+       	    cordova.getThreadPool().execute(new Runnable() {
+                 public void run() {
+                try {
+                    String tag = data.getString(0);
+                    cancelCallWithTag(tag, callbackContext);
+                } catch (JSONException e) {
+                    callbackContext.error("Error parsing tag: " + e.getMessage());
+                }
+            }
+           });
+       	   return true;
         } else {
             Log.e(LOG_TAG, "Invalid action: " + action);
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.INVALID_ACTION));
@@ -109,7 +127,7 @@ public class FetchPlugin extends CordovaPlugin {
                 }
             }
 
-            Request request = requestBuilder.tag("test").build();
+            Request request = requestBuilder.tag(TAG).build();
 
             mClient.newCall(request).enqueue(new Callback() {
                 @Override
@@ -182,28 +200,27 @@ private void setTimeout(long seconds) {
 
     }
 
-// private void cancelAllRequests(final CallbackContext callbackContext) {
-//     try {
-//         mClient.dispatcher().cancelAll();
-//         callbackContext.success("All requests canceled.");
-//     } catch (Exception e) {
-//         // If there's an exception during cancellation, return it as an error
-//         callbackContext.error("Error cancelling requests: " + e.getMessage());
-//     }
-// }
-private void cancelCallWithTag(OkHttpClient client, CallbackContext callbackContext, String tag) {
+private void cancelAllRequests(final CallbackContext callbackContext) {
     try {
-        for (Call call : client.dispatcher().queuedCalls()) {
+        mClient.dispatcher().cancelAll();
+        callbackContext.success("All requests canceled.");
+    } catch (Exception e) {
+        callbackContext.error("Error cancelling requests: " + e.getMessage());
+    }
+}
+	
+private void cancelCallWithTag(CallbackContext callbackContext, String tag) {
+    try {
+        for (Call call : mClient.dispatcher().queuedCalls()) {
             if (tag.equals(call.request().tag()))
                 call.cancel();
         }
-        for (Call call : client.dispatcher().runningCalls()) {
+        for (Call call : mClient.dispatcher().runningCalls()) {
             if (tag.equals(call.request().tag()))
                 call.cancel();
         }
         callbackContext.success("All requests with tag: " + tag + " canceled.");
     } catch (Exception e) {
-        // If there's an exception during cancellation, return it as an error
         callbackContext.error("Error cancelling requests: " + e.getMessage());
     }
  }
